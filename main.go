@@ -21,5 +21,8 @@ func main() {
 	http.HandleFunc("/private/jwks.json", jwksHandler(rsaKey, keyID))
 
 	port := os.Getenv("PORT")
+	if port == "" {
+		port = "80"
+	}
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }
