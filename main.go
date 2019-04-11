@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
@@ -19,6 +20,9 @@ func main() {
 
 	http.HandleFunc("/.well-known/jwks.json", jwksHandler(&rsaKey.PublicKey, keyID))
 	http.HandleFunc("/private/jwks.json", jwksHandler(rsaKey, keyID))
+	http.HandleFunc("/healthcheck", func(w http.ResponseWriter, r *http.Request) {
+		json.NewEncoder(w).Encode(map[string]string{"status": "OK"})
+	})
 
 	port := os.Getenv("PORT")
 	if port == "" {
